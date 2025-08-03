@@ -4,7 +4,7 @@ CREATE TABLE employees (
   nama VARCHAR(255) NOT NULL,
   posisi VARCHAR(255) NOT NULL,
   agama VARCHAR(50) NOT NULL,
-  lokasi_kerja VARCHAR(10) NOT NULL,
+  lokasi_kerja VARCHAR(25) NOT NULL,
   mulai_bergabung DATE NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
