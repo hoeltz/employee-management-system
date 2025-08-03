@@ -40,6 +40,9 @@ export const list = api<ListEmployeesRequest, ListEmployeesResponse>(
         agama,
         lokasi_kerja as "lokasiKerja",
         mulai_bergabung as "mulaiBergabung",
+        alamat,
+        foto,
+        fotocopy_identitas as "fotocopyIdentitas",
         created_at as "createdAt",
         updated_at as "updatedAt"
       FROM employees

@@ -40,6 +40,24 @@ export const update = api<UpdateEmployeeRequest, Employee>(
       paramIndex++;
     }
     
+    if (req.alamat !== undefined) {
+      updates.push(`alamat = $${paramIndex}`);
+      params.push(req.alamat);
+      paramIndex++;
+    }
+    
+    if (req.foto !== undefined) {
+      updates.push(`foto = $${paramIndex}`);
+      params.push(req.foto);
+      paramIndex++;
+    }
+    
+    if (req.fotocopyIdentitas !== undefined) {
+      updates.push(`fotocopy_identitas = $${paramIndex}`);
+      params.push(req.fotocopyIdentitas);
+      paramIndex++;
+    }
+    
     if (updates.length === 0) {
       throw APIError.invalidArgument("no fields to update");
     }
@@ -59,6 +77,9 @@ export const update = api<UpdateEmployeeRequest, Employee>(
         agama,
         lokasi_kerja as "lokasiKerja",
         mulai_bergabung as "mulaiBergabung",
+        alamat,
+        foto,
+        fotocopy_identitas as "fotocopyIdentitas",
         created_at as "createdAt",
         updated_at as "updatedAt"
     `;

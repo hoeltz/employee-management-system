@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Settings, Users, Image, Save, Plus, Edit, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Settings, Users, Image, Save, Plus, Edit, Trash2, ArrowLeft, RefreshCw } from "lucide-react";
 import backend from "~backend/client";
 import type { CreateUserRequest, UpdateUserRequest, UpdateSettingRequest } from "~backend/employee/types";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function AdminPanel() {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
@@ -27,14 +29,15 @@ export default function AdminPanel() {
   
   const [editingUser, setEditingUser] = useState<any>(null);
   const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
+  const [settingValues, setSettingValues] = useState<Record<string, string>>({});
 
   // Queries
-  const { data: users } = useQuery({
+  const { data: users, refetch: refetchUsers } = useQuery({
     queryKey: ["admin", "users"],
     queryFn: () => backend.admin.listUsers()
   });
 
-  const { data: settings } = useQuery({
+  const { data: settings, refetch: refetchSettings } = useQuery({
     queryKey: ["admin", "settings"],
     queryFn: () => backend.admin.listSettings()
   });
@@ -44,11 +47,22 @@ export default function AdminPanel() {
     queryFn: () => backend.employee.list({ limit: 1000 })
   });
 
+  // Initialize setting values when settings are loaded
+  useState(() => {
+    if (settings?.settings) {
+      const values: Record<string, string> = {};
+      settings.settings.forEach(setting => {
+        values[setting.key] = setting.value || "";
+      });
+      setSettingValues(values);
+    }
+  });
+
   // Mutations
   const createUserMutation = useMutation({
     mutationFn: (data: CreateUserRequest) => backend.admin.createUser(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+      refetchUsers();
       toast({ title: "Success", description: "User created successfully" });
       setUserForm({ username: "", email: "", password: "", role: "user", employeeId: "" });
       setIsUserDialogOpen(false);
@@ -62,7 +76,7 @@ export default function AdminPanel() {
   const updateUserMutation = useMutation({
     mutationFn: (data: UpdateUserRequest) => backend.admin.updateUser(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+      refetchUsers();
       toast({ title: "Success", description: "User updated successfully" });
       setEditingUser(null);
       setIsUserDialogOpen(false);
@@ -76,7 +90,7 @@ export default function AdminPanel() {
   const deleteUserMutation = useMutation({
     mutationFn: (id: number) => backend.admin.deleteUser({ id }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+      refetchUsers();
       toast({ title: "Success", description: "User deleted successfully" });
     },
     onError: (error) => {
@@ -88,7 +102,7 @@ export default function AdminPanel() {
   const updateSettingMutation = useMutation({
     mutationFn: (data: UpdateSettingRequest) => backend.admin.updateSetting(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "settings"] });
+      refetchSettings();
       toast({ title: "Success", description: "Setting updated successfully" });
     },
     onError: (error) => {
@@ -106,7 +120,7 @@ export default function AdminPanel() {
         username: userForm.username,
         email: userForm.email,
         role: userForm.role,
-        employeeId: userForm.employeeId ? parseInt(userForm.employeeId) : undefined
+        employeeId: userForm.employeeId && userForm.employeeId !== "none" ? parseInt(userForm.employeeId) : undefined
       });
     } else {
       createUserMutation.mutate({
@@ -114,7 +128,7 @@ export default function AdminPanel() {
         email: userForm.email,
         password: userForm.password,
         role: userForm.role,
-        employeeId: userForm.employeeId ? parseInt(userForm.employeeId) : undefined
+        employeeId: userForm.employeeId && userForm.employeeId !== "none" ? parseInt(userForm.employeeId) : undefined
       });
     }
   };
@@ -126,7 +140,7 @@ export default function AdminPanel() {
       email: user.email,
       password: "",
       role: user.role,
-      employeeId: user.employeeId?.toString() || ""
+      employeeId: user.employeeId?.toString() || "none"
     });
     setIsUserDialogOpen(true);
   };
@@ -139,6 +153,19 @@ export default function AdminPanel() {
 
   const handleSettingUpdate = (key: string, value: string) => {
     updateSettingMutation.mutate({ key, value });
+  };
+
+  const handleSettingValueChange = (key: string, value: string) => {
+    setSettingValues(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleFileUpload = (key: string, file: File) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      handleSettingUpdate(key, base64);
+    };
+    reader.readAsDataURL(file);
   };
 
   const getRoleBadgeColor = (role: string) => {
@@ -155,7 +182,26 @@ export default function AdminPanel() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
+        <div className="flex items-center space-x-4">
+          <Button variant="ghost" onClick={() => navigate("/")} size="sm">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Main
+          </Button>
+          <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              refetchUsers();
+              refetchSettings();
+            }}
+          >
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       <Tabs defaultValue="users" className="space-y-4">
@@ -172,7 +218,7 @@ export default function AdminPanel() {
               <DialogTrigger asChild>
                 <Button onClick={() => {
                   setEditingUser(null);
-                  setUserForm({ username: "", email: "", password: "", role: "user", employeeId: "" });
+                  setUserForm({ username: "", email: "", password: "", role: "user", employeeId: "none" });
                 }}>
                   <Plus className="h-4 w-4 mr-2" />
                   Add User
@@ -357,12 +403,7 @@ export default function AdminPanel() {
                           onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
-                              const reader = new FileReader();
-                              reader.onload = (event) => {
-                                const base64 = event.target?.result as string;
-                                handleSettingUpdate(setting.key, base64);
-                              };
-                              reader.readAsDataURL(file);
+                              handleFileUpload(setting.key, file);
                             }
                           }}
                         />
@@ -379,26 +420,17 @@ export default function AdminPanel() {
                     ) : (
                       <div className="flex space-x-2">
                         <Input
-                          defaultValue={setting.value || ""}
-                          onBlur={(e) => {
-                            if (e.target.value !== setting.value) {
-                              handleSettingUpdate(setting.key, e.target.value);
-                            }
-                          }}
+                          value={settingValues[setting.key] || setting.value || ""}
+                          onChange={(e) => handleSettingValueChange(setting.key, e.target.value)}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
-                              handleSettingUpdate(setting.key, e.currentTarget.value);
+                              handleSettingUpdate(setting.key, settingValues[setting.key] || "");
                             }
                           }}
                         />
                         <Button
                           size="sm"
-                          onClick={() => {
-                            const input = document.querySelector(`input[defaultValue="${setting.value}"]`) as HTMLInputElement;
-                            if (input) {
-                              handleSettingUpdate(setting.key, input.value);
-                            }
-                          }}
+                          onClick={() => handleSettingUpdate(setting.key, settingValues[setting.key] || "")}
                           disabled={updateSettingMutation.isPending}
                         >
                           <Save className="h-4 w-4" />

@@ -92,10 +92,39 @@ export default function EmployeeList() {
         return "bg-purple-100 text-purple-800";
       case "Operational General Manager":
         return "bg-red-100 text-red-800";
+      case "Sales Manager":
+        return "bg-indigo-100 text-indigo-800";
+      case "Sales":
+        return "bg-pink-100 text-pink-800";
+      case "IT Support":
+        return "bg-cyan-100 text-cyan-800";
+      case "Technical Leader":
+        return "bg-orange-100 text-orange-800";
+      case "Technical Supervisor":
+        return "bg-teal-100 text-teal-800";
+      case "Jr. Leader":
+        return "bg-lime-100 text-lime-800";
+      case "Sr. Leader":
+        return "bg-violet-100 text-violet-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
   };
+
+  const positions = [
+    "FO Leader",
+    "Field Enggeneer", 
+    "Jointer",
+    "General Administration",
+    "Operational General Manager",
+    "Sales Manager",
+    "Sales",
+    "IT Support",
+    "Technical Leader",
+    "Technical Supervisor",
+    "Jr. Leader",
+    "Sr. Leader"
+  ];
 
   if (isLoading) {
     return (
@@ -175,11 +204,11 @@ export default function EmployeeList() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All positions</SelectItem>
-                  <SelectItem value="FO Leader">FO Leader</SelectItem>
-                  <SelectItem value="Field Enggeneer">Field Engineer</SelectItem>
-                  <SelectItem value="Jointer">Jointer</SelectItem>
-                  <SelectItem value="General Administration">General Administration</SelectItem>
-                  <SelectItem value="Operational General Manager">Operational General Manager</SelectItem>
+                  {positions.map((position) => (
+                    <SelectItem key={position} value={position}>
+                      {position}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

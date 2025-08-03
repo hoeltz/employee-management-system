@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Calendar, Download, FileText, Users, Clock, DollarSign } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Calendar, Download, FileText, Users, Clock, DollarSign, ArrowLeft } from "lucide-react";
 import backend from "~backend/client";
 import type { ReportRequest } from "~backend/employee/types";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import * as XLSX from "xlsx";
 
 export default function Reports() {
+  const navigate = useNavigate();
   const [reportParams, setReportParams] = useState({
     startDate: new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0],
     endDate: new Date().toISOString().split('T')[0],
@@ -84,7 +86,13 @@ export default function Reports() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Reports & Analytics</h1>
+        <div className="flex items-center space-x-4">
+          <Button variant="ghost" onClick={() => navigate("/")} size="sm">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Main
+          </Button>
+          <h1 className="text-3xl font-bold text-gray-900">Reports & Analytics</h1>
+        </div>
       </div>
 
       {/* Filters */}

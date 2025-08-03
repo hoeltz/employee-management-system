@@ -1,6 +1,6 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Edit, Calendar, MapPin, Briefcase, User } from "lucide-react";
+import { ArrowLeft, Edit, Calendar, MapPin, Briefcase, User, Home, FileImage } from "lucide-react";
 import backend from "~backend/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,6 +36,20 @@ export default function EmployeeDetail() {
         return "bg-purple-100 text-purple-800";
       case "Operational General Manager":
         return "bg-red-100 text-red-800";
+      case "Sales Manager":
+        return "bg-indigo-100 text-indigo-800";
+      case "Sales":
+        return "bg-pink-100 text-pink-800";
+      case "IT Support":
+        return "bg-cyan-100 text-cyan-800";
+      case "Technical Leader":
+        return "bg-orange-100 text-orange-800";
+      case "Technical Supervisor":
+        return "bg-teal-100 text-teal-800";
+      case "Jr. Leader":
+        return "bg-lime-100 text-lime-800";
+      case "Sr. Leader":
+        return "bg-violet-100 text-violet-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -63,7 +77,7 @@ export default function EmployeeDetail() {
         <div className="flex items-center space-x-4">
           <Button variant="ghost" onClick={() => navigate("/")} size="sm">
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            Back to Main
           </Button>
           <h1 className="text-3xl font-bold text-gray-900">Employee Details</h1>
         </div>
@@ -77,7 +91,7 @@ export default function EmployeeDetail() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Information */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -100,12 +114,20 @@ export default function EmployeeDetail() {
                   <p className="text-lg">{employee.agama}</p>
                 </div>
               </div>
+              
+              {employee.alamat && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    <Home className="h-4 w-4 inline mr-1" />
+                    Address
+                  </label>
+                  <p className="text-sm bg-gray-50 p-3 rounded-lg">{employee.alamat}</p>
+                </div>
+              )}
             </CardContent>
           </Card>
-        </div>
 
-        {/* Work Information */}
-        <div>
+          {/* Work Information */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -137,9 +159,50 @@ export default function EmployeeDetail() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Photos and Documents */}
+        <div className="space-y-6">
+          {/* Employee Photo */}
+          {employee.foto && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <User className="h-5 w-5" />
+                  <span>Photo</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <img 
+                  src={employee.foto} 
+                  alt={employee.nama}
+                  className="w-full max-w-64 h-auto object-cover rounded-lg mx-auto"
+                />
+              </CardContent>
+            </Card>
+          )}
+
+          {/* ID Copy */}
+          {employee.fotocopyIdentitas && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <FileImage className="h-5 w-5" />
+                  <span>ID Card Copy</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <img 
+                  src={employee.fotocopyIdentitas} 
+                  alt="ID Card"
+                  className="w-full max-w-64 h-auto object-cover rounded-lg mx-auto"
+                />
+              </CardContent>
+            </Card>
+          )}
+        </div>
       </div>
 
-      {/* Additional Information */}
+      {/* System Information */}
       <Card>
         <CardHeader>
           <CardTitle>System Information</CardTitle>

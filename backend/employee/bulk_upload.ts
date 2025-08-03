@@ -32,8 +32,8 @@ export const bulkUpload = api<BulkUploadRequest, BulkUploadResponse>(
 
         // Insert employee
         await employeeDB.exec`
-          INSERT INTO employees (nip, nama, posisi, agama, lokasi_kerja, mulai_bergabung)
-          VALUES (${employee.nip}, ${employee.nama}, ${employee.posisi}, ${employee.agama}, ${employee.lokasiKerja}, ${employee.mulaiBergabung})
+          INSERT INTO employees (nip, nama, posisi, agama, lokasi_kerja, mulai_bergabung, alamat, foto, fotocopy_identitas)
+          VALUES (${employee.nip}, ${employee.nama}, ${employee.posisi}, ${employee.agama}, ${employee.lokasiKerja}, ${employee.mulaiBergabung}, ${employee.alamat}, ${employee.foto}, ${employee.fotocopyIdentitas})
         `;
 
         success++;

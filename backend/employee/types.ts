@@ -6,6 +6,9 @@ export interface Employee {
   agama: string;
   lokasiKerja: string;
   mulaiBergabung: Date;
+  alamat?: string;
+  foto?: string;
+  fotocopyIdentitas?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -17,6 +20,9 @@ export interface CreateEmployeeRequest {
   agama: string;
   lokasiKerja: string;
   mulaiBergabung: Date;
+  alamat?: string;
+  foto?: string;
+  fotocopyIdentitas?: string;
 }
 
 export interface UpdateEmployeeRequest {
@@ -26,6 +32,9 @@ export interface UpdateEmployeeRequest {
   agama?: string;
   lokasiKerja?: string;
   mulaiBergabung?: Date;
+  alamat?: string;
+  foto?: string;
+  fotocopyIdentitas?: string;
 }
 
 export interface ListEmployeesRequest {

@@ -70,7 +70,8 @@ export default function BulkUpload() {
           posisi: String(row.POSISI || row.posisi || row.Position || ""),
           agama: String(row.AGAMA || row.agama || row.Religion || ""),
           lokasiKerja: String(row.LOKASI_KERJA || row.lokasiKerja || row["Work Location"] || ""),
-          mulaiBergabung: new Date(row.MULAI_BERGABUNG || row.mulaiBergabung || row["Start Date"] || new Date())
+          mulaiBergabung: new Date(row.MULAI_BERGABUNG || row.mulaiBergabung || row["Start Date"] || new Date()),
+          alamat: String(row.ALAMAT || row.alamat || row.Address || "")
         }));
 
         setUploadData(transformedData);
@@ -92,10 +93,11 @@ export default function BulkUpload() {
       {
         NIP: "12345678",
         NAMA: "John Doe",
-        POSISI: "Field Enggeneer",
+        POSISI: "Sales Manager",
         AGAMA: "Islam",
         LOKASI_KERJA: "PS",
-        MULAI_BERGABUNG: "2024-01-01"
+        MULAI_BERGABUNG: "2024-01-01",
+        ALAMAT: "Jl. Contoh No. 123, Jakarta"
       }
     ];
 
@@ -123,7 +125,7 @@ export default function BulkUpload() {
       <div className="flex items-center space-x-4">
         <Button variant="ghost" onClick={() => navigate("/")} size="sm">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          Back to Main
         </Button>
         <h1 className="text-3xl font-bold text-gray-900">Bulk Upload Employees</h1>
       </div>
@@ -141,7 +143,7 @@ export default function BulkUpload() {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                Please use the template format. Required columns: NIP, NAMA, POSISI, AGAMA, LOKASI_KERJA, MULAI_BERGABUNG
+                Please use the template format. Required columns: NIP, NAMA, POSISI, AGAMA, LOKASI_KERJA, MULAI_BERGABUNG. Optional: ALAMAT
               </AlertDescription>
             </Alert>
 

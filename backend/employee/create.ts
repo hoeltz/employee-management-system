@@ -8,8 +8,8 @@ export const create = api<CreateEmployeeRequest, Employee>(
   async (req) => {
     try {
       const row = await employeeDB.queryRow<Employee>`
-        INSERT INTO employees (nip, nama, posisi, agama, lokasi_kerja, mulai_bergabung)
-        VALUES (${req.nip}, ${req.nama}, ${req.posisi}, ${req.agama}, ${req.lokasiKerja}, ${req.mulaiBergabung})
+        INSERT INTO employees (nip, nama, posisi, agama, lokasi_kerja, mulai_bergabung, alamat, foto, fotocopy_identitas)
+        VALUES (${req.nip}, ${req.nama}, ${req.posisi}, ${req.agama}, ${req.lokasiKerja}, ${req.mulaiBergabung}, ${req.alamat}, ${req.foto}, ${req.fotocopyIdentitas})
         RETURNING 
           id,
           nip,
@@ -18,6 +18,9 @@ export const create = api<CreateEmployeeRequest, Employee>(
           agama,
           lokasi_kerja as "lokasiKerja",
           mulai_bergabung as "mulaiBergabung",
+          alamat,
+          foto,
+          fotocopy_identitas as "fotocopyIdentitas",
           created_at as "createdAt",
           updated_at as "updatedAt"
       `;
