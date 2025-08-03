@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Eye, Edit, Trash2, Search, Filter } from "lucide-react";
+import { Eye, Edit, Trash2, Search, Filter, Upload } from "lucide-react";
 import backend from "~backend/client";
 import type { Employee } from "~backend/employee/types";
 import { Button } from "@/components/ui/button";
@@ -117,13 +117,21 @@ export default function EmployeeList() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-900">Employee Management</h1>
-        <Button 
-          onClick={() => seedMutation.mutate()}
-          disabled={seedMutation.isPending}
-          variant="outline"
-        >
-          {seedMutation.isPending ? "Seeding..." : "Seed Database"}
-        </Button>
+        <div className="flex items-center space-x-2">
+          <Button 
+            onClick={() => seedMutation.mutate()}
+            disabled={seedMutation.isPending}
+            variant="outline"
+          >
+            {seedMutation.isPending ? "Seeding..." : "Seed Database"}
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/employees/bulk-upload">
+              <Upload className="h-4 w-4 mr-2" />
+              Bulk Upload
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Filters */}

@@ -4,6 +4,9 @@ import { Toaster } from "@/components/ui/toaster";
 import EmployeeList from "./components/EmployeeList";
 import EmployeeForm from "./components/EmployeeForm";
 import EmployeeDetail from "./components/EmployeeDetail";
+import BulkUpload from "./components/BulkUpload";
+import Reports from "./components/Reports";
+import AdminPanel from "./components/AdminPanel";
 import Navigation from "./components/Navigation";
 
 const queryClient = new QueryClient();
@@ -16,8 +19,11 @@ function AppInner() {
         <Routes>
           <Route path="/" element={<EmployeeList />} />
           <Route path="/employees/new" element={<EmployeeForm />} />
+          <Route path="/employees/bulk-upload" element={<BulkUpload />} />
           <Route path="/employees/:id" element={<EmployeeDetail />} />
           <Route path="/employees/:id/edit" element={<EmployeeForm />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </main>
       <Toaster />

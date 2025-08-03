@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Users, Plus } from "lucide-react";
+import { Users, Plus, Upload, FileText, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Navigation() {
@@ -26,12 +26,42 @@ export default function Navigation() {
             </Button>
             
             <Button
-              variant={location.pathname === "/employees/new" ? "default" : "outline"}
+              variant={location.pathname === "/employees/new" ? "default" : "ghost"}
               asChild
             >
               <Link to="/employees/new">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Employee
+              </Link>
+            </Button>
+
+            <Button
+              variant={location.pathname === "/employees/bulk-upload" ? "default" : "ghost"}
+              asChild
+            >
+              <Link to="/employees/bulk-upload">
+                <Upload className="h-4 w-4 mr-2" />
+                Bulk Upload
+              </Link>
+            </Button>
+
+            <Button
+              variant={location.pathname === "/reports" ? "default" : "ghost"}
+              asChild
+            >
+              <Link to="/reports">
+                <FileText className="h-4 w-4 mr-2" />
+                Reports
+              </Link>
+            </Button>
+
+            <Button
+              variant={location.pathname === "/admin" ? "default" : "ghost"}
+              asChild
+            >
+              <Link to="/admin">
+                <Settings className="h-4 w-4 mr-2" />
+                Admin
               </Link>
             </Button>
           </div>
