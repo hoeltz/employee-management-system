@@ -18,7 +18,7 @@ export const invoiceReport = api<ReportRequest, { reports: InvoiceReport[] }>(
       paramIndex++;
     }
 
-    if (req.lokasiKerja) {
+    if (req.lokasiKerja && req.lokasiKerja !== "all") {
       whereClause += ` AND e.lokasi_kerja = $${paramIndex}`;
       params.push(req.lokasiKerja);
       paramIndex++;
@@ -42,15 +42,15 @@ export const invoiceReport = api<ReportRequest, { reports: InvoiceReport[] }>(
       FROM employees e
       LEFT JOIN invoices i ON e.id = i.employee_id AND i.issue_date >= $1 AND i.issue_date <= $2
       ${req.employeeId ? 'WHERE e.id = $3' : ''}
-      ${req.lokasiKerja && !req.employeeId ? 'WHERE e.lokasi_kerja = $3' : ''}
-      ${req.lokasiKerja && req.employeeId ? 'AND e.lokasi_kerja = $4' : ''}
+      ${req.lokasiKerja && req.lokasiKerja !== "all" && !req.employeeId ? 'WHERE e.lokasi_kerja = $3' : ''}
+      ${req.lokasiKerja && req.lokasiKerja !== "all" && req.employeeId ? 'AND e.lokasi_kerja = $4' : ''}
       GROUP BY e.id, e.nip, e.nama, e.posisi, e.agama, e.lokasi_kerja, e.mulai_bergabung, e.created_at, e.updated_at
       ORDER BY e.nama
     `;
 
     const reportParams = [req.startDate, req.endDate];
     if (req.employeeId) reportParams.push(req.employeeId);
-    if (req.lokasiKerja) reportParams.push(req.lokasiKerja);
+    if (req.lokasiKerja && req.lokasiKerja !== "all") reportParams.push(req.lokasiKerja);
 
     const results = await employeeDB.rawQueryAll<any>(query, ...reportParams);
 

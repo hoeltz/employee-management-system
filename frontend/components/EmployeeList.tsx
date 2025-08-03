@@ -154,7 +154,7 @@ export default function EmployeeList() {
                   <SelectValue placeholder="All locations" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All locations</SelectItem>
+                  <SelectItem value="all">All locations</SelectItem>
                   <SelectItem value="PS">PS</SelectItem>
                   <SelectItem value="TGR">TGR</SelectItem>
                   <SelectItem value="MDN">MDN</SelectItem>
@@ -174,7 +174,7 @@ export default function EmployeeList() {
                   <SelectValue placeholder="All positions" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All positions</SelectItem>
+                  <SelectItem value="all">All positions</SelectItem>
                   <SelectItem value="FO Leader">FO Leader</SelectItem>
                   <SelectItem value="Field Enggeneer">Field Engineer</SelectItem>
                   <SelectItem value="Jointer">Jointer</SelectItem>

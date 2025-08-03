@@ -13,13 +13,13 @@ export const list = api<ListEmployeesRequest, ListEmployeesResponse>(
     const params: any[] = [];
     let paramIndex = 1;
     
-    if (req.lokasiKerja) {
+    if (req.lokasiKerja && req.lokasiKerja !== "all") {
       whereClause += ` WHERE lokasi_kerja = $${paramIndex}`;
       params.push(req.lokasiKerja);
       paramIndex++;
     }
     
-    if (req.posisi) {
+    if (req.posisi && req.posisi !== "all") {
       whereClause += whereClause ? ` AND posisi = $${paramIndex}` : ` WHERE posisi = $${paramIndex}`;
       params.push(req.posisi);
       paramIndex++;

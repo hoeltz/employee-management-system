@@ -127,7 +127,7 @@ export default function Reports() {
                   <SelectValue placeholder="All employees" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All employees</SelectItem>
+                  <SelectItem value="all">All employees</SelectItem>
                   {employees?.employees.map((emp) => (
                     <SelectItem key={emp.id} value={emp.id.toString()}>
                       {emp.nama} ({emp.nip})
@@ -147,7 +147,7 @@ export default function Reports() {
                   <SelectValue placeholder="All locations" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All locations</SelectItem>
+                  <SelectItem value="all">All locations</SelectItem>
                   <SelectItem value="PS">PS</SelectItem>
                   <SelectItem value="TGR">TGR</SelectItem>
                   <SelectItem value="MDN">MDN</SelectItem>

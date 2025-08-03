@@ -244,7 +244,7 @@ export default function AdminPanel() {
                         <SelectValue placeholder="Select employee" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">No employee linked</SelectItem>
+                        <SelectItem value="none">No employee linked</SelectItem>
                         {employees?.employees.map((emp) => (
                           <SelectItem key={emp.id} value={emp.id.toString()}>
                             {emp.nama} ({emp.nip})
